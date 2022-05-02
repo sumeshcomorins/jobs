@@ -1,18 +1,36 @@
-import { View, Text, Button } from 'react-native'
+import { View, Text, Button, TouchableOpacity, StyleSheet } from 'react-native'
 import React from 'react'
 
 export default function HomeScreens({ navigation }) {
+  const clickEventListener = () => {
+    alert('ok')
+  }
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Home screen</Text>
-      <Button
-        title="Go to Search"
-        onPress={() => navigation.navigate('Search')}
-      />
-      <Button
-        title="Go to Register"
-        onPress={() => navigation.navigate('Register')}
-      />
+      <TouchableOpacity style={styles.followButton} onPress={()=>navigation.navigate('Search')}>
+                      <Text style={styles.followButtonText}> Search </Text>  
+                    </TouchableOpacity>
+                    <Text style={{fontSize:15,paddingTop:7}}>OR</Text>
+                    <TouchableOpacity style={styles.followButton} onPress={()=>navigation.navigate('Register')}>
+                      <Text style={styles.followButtonText}> Register </Text>  
+                    </TouchableOpacity>
       </View>
   )
 }
+
+const styles = StyleSheet.create({
+  followButton: {
+    marginTop:10,
+    height:35,
+    width:300,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius:30,
+    backgroundColor: "#00BFFF",
+  },
+  followButtonText:{
+    color: "#FFFFFF",
+    fontSize:20,
+  },
+});   
