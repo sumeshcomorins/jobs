@@ -8,11 +8,12 @@ import HomeScreen from './src/screens/HomeScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
 import SearchScreen from './src/screens/SearchScreen';
+import { colors } from './src/screens/Colors';
 
 const screenOptions = {
   headerTitleAlign: 'center',
   headerStyle: {
-    backgroundColor: 'blue',
+    backgroundColor: colors.schedule_blue,
   },
   headerTintColor: 'white',
 };
