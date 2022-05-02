@@ -3,56 +3,26 @@ import { Button, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { MaterialIcons } from '@expo/vector-icons';
+import HomeScreen from './src/screens/HomeScreen';
+import ProfileScreen from './src/screens/ProfileScreen';
+import RegisterScreen from './src/screens/RegisterScreen';
+import SearchScreen from './src/screens/SearchScreen';
 
-function ProfileScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Profile!</Text>
-    </View>
-  );
-}
+const screenOptions = {
+  headerTitleAlign: 'center',
+  headerStyle: {
+    backgroundColor: 'blue',
+  },
+  headerTintColor: 'white',
+};
 
-function RegisterScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Register!</Text>
-    </View>
-  );
-}
-
-function HomeScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Home screen</Text>
-      <Button
-        title="Go to Search"
-        onPress={() => navigation.navigate('Search')}
-      />
-      <Button
-        title="Go to Register"
-        onPress={() => navigation.navigate('Register')}
-      />
-    </View>
-  );
-}
-
-function SearchScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Search screen</Text>
-      <Button
-        title="Go to Profile"
-        onPress={() => navigation.navigate('Profile')}
-      />
-    </View>
-  );
-}
 
 const HomeStack = createNativeStackNavigator();
 
 function HomeStackScreen() {
   return (
-    <HomeStack.Navigator>
+    <HomeStack.Navigator initialRouteName="Home" screenOptions={screenOptions}>
       <HomeStack.Screen name="Home" component={HomeScreen} />
     </HomeStack.Navigator>
   );
@@ -62,7 +32,7 @@ const SearchStack = createNativeStackNavigator();
 
 function SearchStackScreen() {
   return (
-    <SearchStack.Navigator>
+    <SearchStack.Navigator initialRouteName="Search" screenOptions={screenOptions}>
       <SearchStack.Screen name="Search" component={SearchScreen} />
       <SearchStack.Screen name="Profile" component={ProfileScreen} />
     </SearchStack.Navigator>
@@ -73,9 +43,9 @@ const RegisterStack = createNativeStackNavigator();
 
 function RegisterStackScreen() {
   return (
-    <HomeStack.Navigator>
-      <HomeStack.Screen name="Register" component={RegisterScreen} />
-    </HomeStack.Navigator>
+    <RegisterStack.Navigator initialRouteName="Register" screenOptions={screenOptions}>
+      <RegisterStack.Screen name="Register" component={RegisterScreen} />
+    </RegisterStack.Navigator>
   );
 }
 
@@ -84,10 +54,27 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator screenOptions={{ headerShown: false }}>
-        <Tab.Screen name="Home" component={HomeStackScreen}  />
-        <Tab.Screen name="Search" component={SearchStackScreen} />
-        <Tab.Screen name="Register" component={RegisterStackScreen} />
+      <Tab.Navigator screenOptions={{ headerShown: false }} initialRouteName="Home"
+      activeColor='red'
+      barStyle={{backgroundColor: 'white', borderWidth: 0.15,paddingBottom: 2}}>
+        <Tab.Screen name="Home" component={HomeStackScreen}   options={{
+          tabBarLabel: 'Home',
+          tabBarIcon: ({color}) => (
+            <MaterialIcons name="home" size={24} color={color} />
+          ),
+        }}/>
+        <Tab.Screen name="Search" component={SearchStackScreen} options={{
+          tabBarLabel: 'Search',
+          tabBarIcon: ({color}) => (
+            <MaterialIcons name="search" size={24} color={color} />
+          ),
+        }}/>
+        <Tab.Screen name="Register" component={RegisterStackScreen} options={{
+          tabBarLabel: 'Register',
+          tabBarIcon: ({color}) => (
+            <MaterialIcons name="how-to-reg" size={24} color={color} />
+          ),
+        }}/>
       </Tab.Navigator>
     </NavigationContainer>
   );
