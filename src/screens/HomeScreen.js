@@ -2,13 +2,10 @@ import { View, Text, Button, TouchableOpacity, StyleSheet } from 'react-native'
 import React from 'react'
 
 export default function HomeScreens({ navigation }) {
-  const clickEventListener = () => {
-    alert('ok')
-  }
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <TouchableOpacity style={styles.followButton} onPress={()=>navigation.navigate('Search')}>
-                      <Text style={styles.followButtonText}> Search </Text>  
+                      <Text style={styles.followButtonText}> Search Candidates </Text>  
                     </TouchableOpacity>
                     <Text style={{fontSize:15,paddingTop:7}}>OR</Text>
                     <TouchableOpacity style={styles.followButton} onPress={()=>navigation.navigate('Register')}>

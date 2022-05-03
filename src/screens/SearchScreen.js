@@ -1,36 +1,35 @@
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import React, { useState, useEffect } from 'react'
+import { fetchApi } from './api';
+import { config } from '../../config';
+import { useIsFocused } from "@react-navigation/native";
 
 export default function SearchScreen({ navigation }) {
+    const isFocused = useIsFocused()
+    const [data, setData] = useState()
 
-    const [data, setData] = useState([
-        {id:1, name: "Mark Doe",   position:"CEO",},               
-        {id:1, name: "John Doe",   position:"CTO",},              
-        {id:2, name: "Clark Man",  position:"Creative designer", },
-        {id:3, name: "Jaden Boor", position:"Front-end dev",  } , 
-        {id:4, name: "Srick Tree", position:"Backend-end dev",} , 
-        {id:5, name: "John Doe",   position:"Creative designer",},
-        {id:6, name: "John Doe",   position:"Manager",},          
-        {id:8, name: "John Doe",   position:"IOS dev", },        
-        {id:9, name: "John Doe",   position:"Web dev", },      
-        {id:9, name: "John Doe",   position:"Analyst", }    
-    ])
+    useEffect(async() => {
+      const response = await fetchApi(config.TEST+'collectRecords');
+    if (response.data.status){
+     setData(response.data.records.filter(el => {
+      return el.workstatus;
+   }))
+
+    }else{
+      alert("Search Faild please Try Later")
+    }
+    }, [isFocused])
+    
 
     const clickEventListener = (item) => {
-        navigation.navigate('Profile', {
-            item: item,
-          })
+        // navigation.navigate('Profile', {
+        //     item: item,
+        //   })
+        alert('Inprogress')
     }
   return (
-    // <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    //   <Text>Search screen</Text>
-    //   <Button
-    //     title="Go to Profile"
-    //     onPress={() => navigation.navigate('Profile')}
-    //   />
-    // </View>
     <View style={styles.container}>
-        <FlatList style={styles.list}
+        {data ? <FlatList style={styles.list}
           contentContainerStyle={styles.listContainer}
           data={data}
           horizontal={false}
@@ -48,7 +47,7 @@ export default function SearchScreen({ navigation }) {
                 <View style={styles.cardFooter}>
                   <View style={{alignItems:"center", justifyContent:"center"}}>
                     <Text style={styles.name}>{item.name}</Text>
-                    <Text style={styles.position}>{item.position}</Text>
+                    <Text style={styles.position}>{item.jobcategory}</Text>
                     <TouchableOpacity style={styles.followButton} onPress={()=>clickEventListener(item)}>
                       <Text style={styles.followButtonText}>View </Text>  
                     </TouchableOpacity>
@@ -56,7 +55,7 @@ export default function SearchScreen({ navigation }) {
                 </View>
               </TouchableOpacity>
             )
-          }}/>
+          }}/>: <Text>please wait</Text>}
       </View>
   )
 }
@@ -69,6 +68,7 @@ const styles = StyleSheet.create({
     list: {
       paddingHorizontal: 5,
       backgroundColor:"#E6E6E6",
+      paddingTop:20
     },
     listContainer:{
      alignItems:'center'

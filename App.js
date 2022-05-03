@@ -11,11 +11,12 @@ import SearchScreen from './src/screens/SearchScreen';
 import { colors } from './src/screens/Colors';
 
 const screenOptions = {
-  headerTitleAlign: 'center',
-  headerStyle: {
-    backgroundColor: colors.schedule_blue,
-  },
-  headerTintColor: 'white',
+  // headerTitleAlign: 'center',
+  // headerStyle: {
+  //   backgroundColor: colors.schedule_blue,
+  // },
+  // headerTintColor: 'white',
+  headerShown: false
 };
 
 

@@ -1,16 +1,45 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, StatusBar, Keyboard, ScrollView } from 'react-native'
 import { colors } from './Colors';
 import { fetchApi } from './api';
 import { config } from '../../config';
+import { RadioButton } from 'react-native-paper';
 export default function RegisterScreen(props) {
   const [username,setusername] = useState("");
   const [password,setpassword] = useState("");
   const [email,setEmail] = useState("");
   const [phone,setPhone] = useState("");
+  const [gender, setGender] = useState('male');
+  const [workStatus, setWorkStatus] = useState('fresher');
+  const [jobCategory, setJobCategory] = useState('');
 
   const onRegister = async() => {
     Keyboard.dismiss()
+    if(username && password && email && phone && jobCategory ){
+      const data ={
+        "username"    : username,
+        "password"    : password,
+        "email"       : email,
+        "phone"       : phone,
+        "gender"      : gender,
+        "workStatus"  : workStatus,
+        "jobCategory" : jobCategory
+      }
+const response = await fetchApi(config.TEST+'registerJobUser',data);
+    if (response.data.status){
+      alert('Registration Successfully Submited')
+      setusername('')
+      setpassword('')
+      setEmail('')
+      setPhone('')
+      setJobCategory('')
+      props.navigation.navigate('Home')
+    }else{
+      alert("Registration Faild please Submit Later")
+    }
+    }else{
+      alert('Please Fill ALL Details')
+    }
     
   }
 
@@ -50,6 +79,57 @@ export default function RegisterScreen(props) {
         value={password}
         onChangeText={(password) => setpassword(password)}
       />
+      <TextInput
+        style={styles.inputBox}
+        placeholder="Which Job Category"
+        placeholderTextColor={colors.white}
+        value={jobCategory}
+        onChangeText={(jobCategory) => setJobCategory(jobCategory)}
+      />
+
+
+      <View style ={{flexDirection:'row',alignItems: 'center'}}>
+      <Text style={styles.radioQuestion}>Gender*</Text>
+      <View style={{flexDirection:'row',alignItems:'center'}}>
+      <RadioButton
+        value="male"
+        status={ gender === 'male' ? 'checked' : 'unchecked' }
+        onPress={() => setGender('male')}
+      />
+      <Text>Male</Text>
+      </View>
+      <View style={{flexDirection:'row',alignItems:'center'}}>
+      <RadioButton
+        value="female"
+        status={ gender === 'female' ? 'checked' : 'unchecked' }
+        onPress={() => setGender('female')}
+      />
+      <Text>Female</Text>
+      </View>
+      </View>
+
+    
+      <View style ={{flexDirection:'row',alignItems: 'center'}}>
+      <Text style={styles.radioQuestion}>Work Status*</Text>
+
+      <View style={{flexDirection:'row',alignItems:'center'}}>
+      <RadioButton
+        value="fresher"
+        status={ workStatus == 'fresher' ? 'checked' : 'unchecked' }
+        onPress={() => setWorkStatus('fresher')}
+      />
+      <Text>Fresher</Text>
+      </View>
+      <View style={{flexDirection:'row',alignItems:'center'}}>
+      <RadioButton
+        value="experienced"
+        status={ workStatus == 'experienced' ? 'checked' : 'unchecked' }
+        onPress={() => setWorkStatus('experienced')}
+      />
+      <Text>Experienced</Text>
+      </View>
+      </View>
+
       <TouchableOpacity style={styles.button} onPress={() => onRegister()}>
         <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>
@@ -91,5 +171,9 @@ const styles = StyleSheet.create({
     borderRadius:25,
     paddingHorizontal:20,
     paddingVertical:15
+  },
+  radioQuestion: {
+    fontSize: 15,
+    width: '30%'
   },
 })
