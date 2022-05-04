@@ -1,32 +1,43 @@
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native'
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { fetchApi } from './api';
 import { config } from '../../config';
 import { useIsFocused } from "@react-navigation/native";
-
+import { colors } from './Colors';
 export default function SearchScreen({ navigation }) {
     const isFocused = useIsFocused()
     const [data, setData] = useState()
+   const [loading, setLoading] = useState( false )
 
     useEffect(async() => {
+      setLoading(true)
       const response = await fetchApi(config.TEST+'collectRecords');
     if (response.data.status){
      setData(response.data.records.filter(el => {
       return el.workstatus;
    }))
-
+   setLoading(false)
     }else{
       alert("Search Faild please Try Later")
+      setLoading(false)
     }
     }, [isFocused])
     
 
     const clickEventListener = (item) => {
-        // navigation.navigate('Profile', {
-        //     item: item,
-        //   })
-        alert('Inprogress')
+        navigation.navigate('Profile', {
+            item: item,
+          })
+        // alert('Inprogress')
     }
+
+    if ( loading ) {
+      return (
+         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'transparent', }}>
+            <ActivityIndicator size="large" color={colors.primaryColor} />
+         </View>
+      );
+   }
   return (
     <View style={styles.container}>
         {data ? <FlatList style={styles.list}
@@ -55,7 +66,10 @@ export default function SearchScreen({ navigation }) {
                 </View>
               </TouchableOpacity>
             )
-          }}/>: <Text>please wait</Text>}
+          }}/>: 
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Text>No Data Available</Text>
+            </View>}
       </View>
   )
 }

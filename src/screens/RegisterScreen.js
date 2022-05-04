@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from 'react'
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, StatusBar, Keyboard, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, StatusBar, Keyboard, ScrollView, ActivityIndicator } from 'react-native'
 import { colors } from './Colors';
 import { fetchApi } from './api';
 import { config } from '../../config';
@@ -12,9 +12,11 @@ export default function RegisterScreen(props) {
   const [gender, setGender] = useState('male');
   const [workStatus, setWorkStatus] = useState('fresher');
   const [jobCategory, setJobCategory] = useState('');
+  const [loading, setLoading] = useState( false )
 
   const onRegister = async() => {
     Keyboard.dismiss()
+    setLoading(true)
     if(username && password && email && phone && jobCategory ){
       const data ={
         "username"    : username,
@@ -27,6 +29,7 @@ export default function RegisterScreen(props) {
       }
 const response = await fetchApi(config.TEST+'registerJobUser',data);
     if (response.data.status){
+      setLoading(false)
       alert('Registration Successfully Submited')
       setusername('')
       setpassword('')
@@ -35,13 +38,23 @@ const response = await fetchApi(config.TEST+'registerJobUser',data);
       setJobCategory('')
       props.navigation.navigate('Home')
     }else{
+      setLoading(false)
       alert("Registration Faild please Submit Later")
     }
     }else{
+      setLoading(false)
       alert('Please Fill ALL Details')
     }
     
   }
+
+  if ( loading ) {
+    return (
+       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'transparent', }}>
+          <ActivityIndicator size="large" color={colors.primaryColor} />
+       </View>
+    );
+ }
 
   return (
       <View style={{flex:1}}>
